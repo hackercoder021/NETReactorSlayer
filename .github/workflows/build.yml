@@ -63,7 +63,7 @@ jobs:
         run: Copy-Item -Path bin\Release\${{matrix.build-dir}}\* -Destination C:\builtfiles\NETReactorSlayer-${{matrix.platform}} -Recurse
       
       - name: Upload NETReactorSlayer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/fixes' || startsWith(github.ref, 'refs/tags/') }}
         with:
           name: NETReactorSlayer-${{matrix.platform}}
