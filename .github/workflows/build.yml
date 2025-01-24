@@ -1,14 +1,15 @@
 name: GitHub CI
+
 on:
   push:
     paths-ignore:
-          - '**.md'
-          - '**.yml'
+      - '**.md'
+      - '**.yml'
     branches:
-      - fixes   # Add the 'fixes' branch to the workflow trigger
+      - fixes   # Only trigger on the 'fixes' branch for pushes
   pull_request:
     branches:
-      - fixes   # Ensure PRs to both branches are considered
+      - fixes   # Only trigger on PRs targeting the 'fixes' branch
   release:
     types:
       - released
@@ -30,13 +31,15 @@ jobs:
         include:
           - platform: net6.0-win64
             build-dir: net6.0\win-x64\publish
-            
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
             submodules: true
-            
+        # Optionally check if the repository is the correct one
+        # if: ${{ github.repository == 'hackercoder021/NETReactorSlayer' }}
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
@@ -57,7 +60,7 @@ jobs:
         
       - name: Create output directory
         run: New-Item -ItemType Directory -Path C:\builtfiles\NETReactorSlayer-${{matrix.platform}} -Force > $null
-        continue-on-error: true
+        continue-on-error: true  # Keep if you want to ignore errors here
         
       - name: Copy release files for upload
         run: Copy-Item -Path bin\Release\${{matrix.build-dir}}\* -Destination C:\builtfiles\NETReactorSlayer-${{matrix.platform}} -Recurse
@@ -69,4 +72,3 @@ jobs:
           name: NETReactorSlayer-${{matrix.platform}}
           path: C:\builtfiles\NETReactorSlayer-${{matrix.platform}}
           if-no-files-found: error
-
