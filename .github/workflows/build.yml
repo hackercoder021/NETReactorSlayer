@@ -5,11 +5,9 @@ on:
           - '**.md'
           - '**.yml'
     branches:
-      - master
       - fixes   # Add the 'fixes' branch to the workflow trigger
   pull_request:
     branches:
-      - master
       - fixes   # Ensure PRs to both branches are considered
   release:
     types:
